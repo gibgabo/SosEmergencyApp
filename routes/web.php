@@ -25,9 +25,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('incidents')->controller(IncidentsController::class)->group(function () {
-        Route::get('/', 'index')->name('incidents');
+        Route::get('/', 'index')->name('incidents.index');
         Route::inertia('add', 'Incidents/Add')->name('incident.add');
         Route::post('create', 'create')->name('incident.create');
+        Route::get('edit/{id}', 'edit')->name('incident.edit'); // This line should define the edit route
+        Route::post('update/{id}', 'update')->name('incident.update');
+        Route::get('show/{id}', 'show');
+        Route::delete('delete/{id}', 'delete');
     });
 });
 

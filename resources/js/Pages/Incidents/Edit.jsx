@@ -1,25 +1,25 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
 import React from "react";
-import { route } from "ziggy-js"; // Import the route helper from Ziggy
-
-export default function Add({ auth }) {
+import { route } from "ziggy-js";
+export default function Edit({auth,incident}){
     const { data, setData, post, processing, errors } = useForm({
-        pin_number: "",
-        client_name: "",
-        incident_type: "",
-        description: "",
+        pin_number: incident.pin_number,
+        client_name: incident.client_name,
+        incident_type: incident.incident_type,
+        description: incident.description,
+        id:incident.id,
         image: null,
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route("incident.create")); // Use the route helper correctly
+        post(route("incident.update", { id: data.id })); // Use the route helper correctly
     };
 
     return (
-        <Authenticated user={auth.user} header={<h2>Add Incident Report</h2>}>
-            <Head title="Add Incidents" />
+        <Authenticated user={auth.user} header={<h2>Edit Incident Report</h2>}>
+            <Head title="Edit Incidents" />
             <section className="bg-white dark:bg-gray-900">
                 <div className="max-w-2xl px-4 py-8 mx-auto lg:py-16">
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
@@ -131,6 +131,10 @@ export default function Add({ auth }) {
                                     </div>
                                 )}
                             </div>
+                            <div className="col-md-3">
+                                <img src={'../../storage/'+ incident.image} style={{width:'240px'}}/>
+
+                            </div>
 
                             <div className="px-3 py-10 sm:col-span-2">
                                 <label
@@ -160,7 +164,7 @@ export default function Add({ auth }) {
                                 className="inline-flex items-center px-6 py-3 mb-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                 disabled={processing}
                             >
-                                Add Incident
+                                Update
                             </button>
 
                     </form>

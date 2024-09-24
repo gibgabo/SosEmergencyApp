@@ -11,15 +11,17 @@ const Pagination = ({ links, currentPage, setCurrentPage }) => {
     };
 
     return (
+        <div className="px-4 py-12">
         <nav aria-label="Page navigation example">
-            <ul className="inline-flex -space-x-px text-sm">
+        <ul className="flex items-center justify-center h-8 -space-x-px text-sm">
                 {/* Previous Button */}
                 {links.previous && (
                     <li>
                         <Link
                             href={links.previous.url || "#"}
-                            className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                            preserveState
+                            className={`mx-1 px-4 py-2 border rounded ${
+                                link.active ? "font-bold" : ""
+                            }`}
                             onClick={() => handlePageChange(links.previous.url)}
                         >
                             Previous
@@ -32,12 +34,9 @@ const Pagination = ({ links, currentPage, setCurrentPage }) => {
                     <li key={index}>
                         <Link
                             href={link.url || "#"}
-                            className={`flex items-center justify-center px-3 h-8 leading-tight ${
-                                link.active
-                                    ? "text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
-                                    : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                            } dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
-                            preserveState
+                            className={`mx-1 px-4 py-2 border rounded ${
+                                link.active ? "font-bold" : ""
+                            }`}
                             onClick={() => handlePageChange(link.url)}
                             dangerouslySetInnerHTML={{ __html: link.label }}
                         />
@@ -49,7 +48,7 @@ const Pagination = ({ links, currentPage, setCurrentPage }) => {
                     <li>
                         <Link
                             href={links.next.url || "#"}
-                            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            className="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                             preserveState
                             onClick={() => handlePageChange(links.next.url)}
                         >
@@ -59,6 +58,7 @@ const Pagination = ({ links, currentPage, setCurrentPage }) => {
                 )}
             </ul>
         </nav>
+        </div>
     );
 };
 
