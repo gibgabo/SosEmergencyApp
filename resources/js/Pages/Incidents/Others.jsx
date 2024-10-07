@@ -1,4 +1,4 @@
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+
 import { Head, useForm, usePage } from "@inertiajs/react";
 import React from "react";
 import { route } from "ziggy-js"; // Import the route helper from Ziggy
@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 
 export default function other({ categoryId }) {
     const { category_id } = usePage().props;
-    console.log("Category ID:", category_id);
     const { data, setData, post, processing, errors } = useForm({
         pin_number: "",
         client_name: "",

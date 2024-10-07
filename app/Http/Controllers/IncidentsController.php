@@ -165,9 +165,28 @@ class IncidentsController extends Controller
         $counts = DB::table('incidents')
             ->join('categories', 'incidents.category_id', '=', 'categories.id')
             ->select('categories.category_type', DB::raw('COUNT(incidents.id) as incident_count'))
+            ->whereNull('incidents.deleted_at') // Exclude soft deleted records
             ->groupBy('categories.category_type')
             ->get();
 
         return inertia('Dashboard', ['counts' => $counts]);
+    }
+
+    public function showByCategory($category)
+    {
+        // Retrieve incidents based on category name or ID
+        $categoryDetails = Category::where('category_type', $category)->first();
+
+        if (!$categoryDetails) {
+            abort(404, "Category not found");
+        }
+
+        // Fetch incidents for the selected category with pagination
+        $incidents = Incidents::where('category_id', $categoryDetails->id)->paginate(5); // Change here to paginate
+
+        return Inertia::render('CategoryIncidents/CategoryIncidents', [
+            'incidents' => $incidents,
+            'category' => $categoryDetails,
+        ]);
     }
 }

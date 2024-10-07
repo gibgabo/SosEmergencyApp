@@ -1,7 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import Cards from "@/Components/Cards"; // Import the Cards component
-import CategoryIcon from "@/Components/CategoryIcon";
 
 export default function Dashboard({ counts }) {
     // Check if 'counts' is defined and is an array
@@ -29,21 +28,15 @@ export default function Dashboard({ counts }) {
                         {/* Map over incidentCounts if available */}
                         {incidentCounts.length > 0 ? (
                             incidentCounts.map((count, index) => (
-
                                 <Cards
                                     key={index}
                                     category={count.category_type}
                                     numbers={count.incident_count}
-
                                 />
-
                             ))
                         ) : (
                             <p>No incidents to display.</p>
                         )}
-
-
-
                     </div>
                 </div>
             </div>

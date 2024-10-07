@@ -6,8 +6,6 @@ import Swal from 'sweetalert2';
 
 export default function flood({ categoryId }) {
     const { category_id } = usePage().props;
-
-    console.log("Category ID:", category_id);
     const { data, setData, post, processing, errors } = useForm({
         pin_number: "",
         client_name: "",

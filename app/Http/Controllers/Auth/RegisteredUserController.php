@@ -13,11 +13,33 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
+
 class RegisteredUserController extends Controller
 {
     /**
      * Display the registration view.
      */
+    public function index(Request $request)
+    {
+        // Retrieve search term from the request
+        $term = $request->input('term');
+        $query = User::query();
+        if ($term) {
+            $query->where(function ($query) use ($term) {
+                $query->where('name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('email', 'LIKE', '%' . $term . '%');
+            });
+        }
+
+        // Paginate the filtered results and append the search term to the pagination links
+        $users = $query->latest()->paginate(5)->appends(['term' => $term]);
+
+        // Return the Inertia page with the users' data
+        return inertia('Users/Index', [
+            'users' => $users
+        ]);
+    }
+
     public function create(): Response
     {
         return Inertia::render('Auth/Register');

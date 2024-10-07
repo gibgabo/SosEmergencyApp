@@ -6,8 +6,6 @@ import Swal from 'sweetalert2';
 
 export default function medical({ categoryId }) {
     const { category_id } = usePage().props;
-
-    console.log("Category ID:", category_id);
     const { data, setData, post, processing, errors } = useForm({
         pin_number: "",
         client_name: "",
@@ -20,7 +18,7 @@ export default function medical({ categoryId }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route("crime.medical.create"), {
+        post(route("medical.incident.create"), {
             data: {
                 ...data,
                 category_id: data.category_id || categoryId, // Ensure category_id is set

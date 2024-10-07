@@ -78,7 +78,11 @@ export default function Authenticated({ header, children }) {
                             </NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="block px-4 py-2 rounded hover:bg-gray-200">
+                            <NavLink
+                                href={route("users.index")}
+                                active={route().current("users.index")}
+                                className="block px-4 py-2 rounded hover:bg-gray-200"
+                            >
                                 User Management
                             </NavLink>
                         </li>

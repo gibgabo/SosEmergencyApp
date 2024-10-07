@@ -1,13 +1,21 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import React from "react";
 
 export default function Show({ auth, incident }) {
     return (
         <Authenticated user={auth.user} header={<h2>Show Incidents</h2>}>
             <Head title="Show Incident" />
+            {/* Back to Dashboard Button */}
+
             <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                 <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <Link
+                        href={route("incidents.index")}
+                        className="text-blue-600 hover:underline"
+                    >
+                        ← Back to incidents
+                    </Link>
                     {/* Displaying incident details in disabled input fields */}
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         PIN Number:
@@ -50,19 +58,6 @@ export default function Show({ auth, incident }) {
                 </div>
                 <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full">
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Description:
-                    </label>
-                    <input
-                        type="text"
-                        id="description"
-                        aria-label="Description"
-                        className="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value={incident.description}
-                        disabled
-                    />
-                </div>
-                <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Created At:
                     </label>
                     <input
@@ -74,7 +69,21 @@ export default function Show({ auth, incident }) {
                         disabled
                     />
                 </div>
-                <div className= "p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full">
+                <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full">
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Description:
+                    </label>
+                    <input
+                        type="text"
+                        id="description"
+                        aria-label="Description"
+                        className="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        value={incident.description}
+                        disabled
+                    />
+                </div>
+
+                <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full">
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Image:
                     </label>

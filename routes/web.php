@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IncidentsController;
 use App\Http\Controllers\ProfileController;
@@ -7,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Category;
+
 
 
 // Route for the welcome page
@@ -17,6 +19,7 @@ Route::get('/', function () {
 
 // Resource routes for categories
 Route::resource('categories', CategoryController::class);
+
 
 // Route to add incidents with category_id
 Route::get('/incidents/add/{category_id}', [IncidentsController::class, 'add'])->name('incident.add');
@@ -35,7 +38,11 @@ Route::post('/incidents/other/create', [IncidentsController::class, 'create'])->
 // The remaining routes within the auth middleware group
 Route::middleware('auth')->group(function () {
     // Keep this dashboard route to fetch incident counts
+    Route::get('/users', [RegisteredUserController::class, 'index'])->name('users.index');
+
     Route::get('/dashboard', [IncidentsController::class, 'getIncidentCounts'])->name('dashboard');
+    Route::get('/incidents/{category}', [IncidentsController::class, 'showByCategory']);
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

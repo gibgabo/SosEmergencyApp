@@ -1,5 +1,5 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, Link } from "@inertiajs/react";
 import React from "react";
 import { route } from "ziggy-js";
 export default function Edit({auth,incident}){
@@ -21,6 +21,12 @@ export default function Edit({auth,incident}){
         <Authenticated user={auth.user} header={<h2>Edit Incident Report</h2>}>
             <Head title="Edit Incidents" />
             <section className="bg-white dark:bg-gray-900">
+                         <Link
+                            href={route("incidents.index")}
+                            className="text-blue-600 hover:underline"
+                        >
+                            ← Back to incidents
+                        </Link>
                 <div className="max-w-2xl px-4 py-8 mx-auto lg:py-16">
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                         Add a new incident
