@@ -87,19 +87,27 @@ export default function Category({ auth, flash, categories }) {
         <Authenticated user={auth.user} header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Categories</h2>}>
             <Head title="Categories" />
             <ToastContainer />
+                <div className="flex items-center justify-between mb-2">
+                    {/* Search bar component */}
+                    <SearchBar onSearch={handleSearch} />
 
-            {/* Search bar component */}
-            <SearchBar onSearch={handleSearch} />
+                    {/* Button to trigger modal */}
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="px-4 py-2 text-white bg-blue-500 rounded-md"
+                    >
+                        Add Category
+                    </button>
+                </div>
+
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
+
                             <th scope="col" className="px-6 py-3">
-                                Category ID
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Category Type
+                                Name
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Description
@@ -115,12 +123,7 @@ export default function Category({ auth, flash, categories }) {
                                 key={category.id}
                                 className="border-b odd:bg-white even:bg-gray-50 dark:border-gray-700"
                             >
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                    {category.id}
-                                </th>
+
                                 <td className="px-6 py-4">
                                     {category.category_type}
                                 </td>
@@ -143,13 +146,7 @@ export default function Category({ auth, flash, categories }) {
                 </table>
             </div>
 
-            {/* Button to trigger modal */}
-            <button
-                onClick={() => setIsModalOpen(true)}
-                className="px-4 py-2 mt-6 text-white bg-blue-500 rounded-md"
-            >
-                Add Category
-            </button>
+
 
             {/* Modal */}
             {isModalOpen && (
@@ -204,7 +201,8 @@ export default function Category({ auth, flash, categories }) {
                                     </span>
                                 )}
                             </div>
-                            <div className="flex justify-end">
+                            <div>
+
                                 <button
                                     type="button"
                                     onClick={() => setIsModalOpen(false)}
@@ -220,6 +218,7 @@ export default function Category({ auth, flash, categories }) {
                                     Submit
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>

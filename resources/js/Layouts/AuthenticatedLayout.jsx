@@ -74,7 +74,7 @@ export default function Authenticated({ header, children }) {
                                 active={route().current("categories.page")}
                                 className="block px-4 py-2 rounded hover:bg-gray-200"
                             >
-                                Category
+                                Categories
                             </NavLink>
                         </li>
                         <li className="nav-item">
@@ -83,7 +83,28 @@ export default function Authenticated({ header, children }) {
                                 active={route().current("users.index")}
                                 className="block px-4 py-2 rounded hover:bg-gray-200"
                             >
-                                User Management
+                                Users
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                        <NavLink
+                                href={route("profile.edit")}
+                                active={route().current("profile.edit")}
+                                className="block px-4 py-2 rounded hover:bg-gray-200"
+                            >
+                                Account
+                            </NavLink>
+
+                        </li>
+                        <li className="nav-item">
+                        <NavLink
+                                href={route("logout")}
+                                active={route().current("logout")}
+                                method="post"
+                                as="button"
+                                className="block px-4 py-2 text-red-500 rounded hover:bg-gray-200"
+                            >
+                                Log Out
                             </NavLink>
                         </li>
                     </ul>
@@ -107,22 +128,9 @@ export default function Authenticated({ header, children }) {
                         {/* User Profile Links */}
                         <div className="flex items-center space-x-4">
                             <span className="text-sm lg:text-base me-3">
-                                Welcome - {user.name}
+                                {user.name}
                             </span>
-                            <NavLink
-                                href={route("profile.edit")}
-                                className="text-xs btn btn-outline-primary sm:text-sm lg:text-base me-2"
-                            >
-                                Profile
-                            </NavLink>
-                            <NavLink
-                                href={route("logout")}
-                                method="post"
-                                as="button"
-                                className="text-xs btn btn-outline-danger sm:text-sm lg:text-base"
-                            >
-                                Log Out
-                            </NavLink>
+
                         </div>
                     </div>
                 </header>

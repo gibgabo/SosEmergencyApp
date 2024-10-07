@@ -6,15 +6,13 @@ import { Head, useForm } from "@inertiajs/react";
 import SearchBar from "@/Components/SearchBar";
 
 export default function UserManagement({ auth, flash, users }) {
-    console.log(users); // Check the structure of users
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredUsers, setFilteredUsers] = useState(users.data); // Initialize with users.data
-
+    const [filteredUsers, setFilteredUsers] = useState(users.data);
     const { delete: destroy } = useForm();
 
     useEffect(() => {
         if (searchTerm === "") {
-            setFilteredUsers(Array.isArray(users.data) ? users.data : []); // Update the filteredUsers based on users.data
+            setFilteredUsers(Array.isArray(users.data) ? users.data : []);
         } else {
             const filtered = users.data.filter(
                 (user) =>
@@ -47,7 +45,7 @@ export default function UserManagement({ auth, flash, users }) {
                     const updatedUsers = filteredUsers.filter(
                         (user) => user.id !== userId
                     );
-                    setFilteredUsers(updatedUsers); // Ensure this updates the UI
+                    setFilteredUsers(updatedUsers);
                     toast.success("User deleted successfully.");
                 },
                 onError: () => {
@@ -59,12 +57,12 @@ export default function UserManagement({ auth, flash, users }) {
         }
     };
 
-    return (
+    return ( 
         <Authenticated
             user={auth.user}
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    User Management
+                    Users
                 </h2>
             }
         >
@@ -78,21 +76,14 @@ export default function UserManagement({ auth, flash, users }) {
                 <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
-                                User ID
-                            </th>
+
                             <th scope="col" className="px-6 py-3">
                                 Name
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Email
                             </th>
-                            <th scope="col" className="px-6 py-3">
-                                Email Verified
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Password (Hashed)
-                            </th>
+
                             <th scope="col" className="px-6 py-3">
                                 Action
                             </th>
@@ -105,22 +96,10 @@ export default function UserManagement({ auth, flash, users }) {
                                     key={user.id}
                                     className="border-b odd:bg-white even:bg-gray-50 dark:border-gray-700"
                                 >
-                                    <th
-                                        scope="row"
-                                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                    >
-                                        {user.id}
-                                    </th>
+
                                     <td className="px-6 py-4">{user.name}</td>
                                     <td className="px-6 py-4">{user.email}</td>
-                                    <td className="px-6 py-4">
-                                        {user.email_verified_at
-                                            ? "Verified"
-                                            : "Not Verified"}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {user.password || "N/A"}
-                                    </td>
+
                                     <td className="flex px-6 py-4 space-x-4">
                                         <button
                                             className="text-red-600 hover:underline"
