@@ -1,10 +1,9 @@
-
 import { Head, useForm, usePage } from "@inertiajs/react";
 import React from "react";
 import { route } from "ziggy-js"; // Import the route helper from Ziggy
 import Swal from 'sweetalert2';
 
-export default function other({ categoryId }) {
+export default function Other({ categoryId }) {
     const { category_id } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
         pin_number: "",
@@ -25,8 +24,8 @@ export default function other({ categoryId }) {
             },
             onSuccess: () => {
                 Swal.fire({
-                    title: "Crime other Reported!",
-                    text: "Your crime other report has been successfully submitted.",
+                    title: "Other Incident Reported!",
+                    text: "Your other incident report has been successfully submitted.",
                     icon: "success",
                     confirmButtonText: "OK"
                 });
@@ -34,7 +33,7 @@ export default function other({ categoryId }) {
             onError: () => {
                 Swal.fire({
                     title: "Error",
-                    text: "There was an error submitting your crime incident report. Please try again.",
+                    text: "There was an error submitting your other incident report. Please try again.",
                     icon: "error",
                     confirmButtonText: "OK"
                 });
@@ -43,146 +42,123 @@ export default function other({ categoryId }) {
     };
 
     return (
-        <div header={<h2>Add other Report</h2>}>
-            <Head title="Add other" />
+        <div>
+            <Head title="Add Other Incident" />
             <section className="bg-white dark:bg-gray-900">
                 <div className="max-w-2xl px-4 py-8 mx-auto lg:py-16">
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                    Specify the Others Incident
+                        Specify the Other Incident
                     </h2>
                     <form onSubmit={handleSubmit}>
-                    <input type="hidden" name="category_id" value={data.category_id || categoryId}
-                    onChange={(e)=> setData("category_id", e.target.value)} />
+                        {/* Hidden input for category ID */}
+                        <input type="hidden" name="category_id" value={data.category_id || categoryId}
+                            onChange={(e) => setData("category_id", e.target.value)} />
+
                         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                            <div className="sm:col-span-2">
-                                <label
-                                    htmlFor="pin_number"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    PIN Number
-                                </label>
+                            {/* PIN Number */}
+                            <div className="relative sm:col-span-2">
                                 <input
                                     type="text"
                                     name="pin_number"
-                                    id="pin_number"
+                                    id="floating_pin_number"
                                     value={data.pin_number}
-                                    onChange={(e) =>
-                                        setData("pin_number", e.target.value)
-                                    }
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Type PIN number"
+                                    onChange={(e) => setData("pin_number", e.target.value)}
+                                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" "
                                     required
                                 />
-                                {errors.pin_number && (
-                                    <div className="text-sm text-red-600">
-                                        {errors.pin_number}
-                                    </div>
-                                )}
+                                <label
+                                    htmlFor="floating_pin_number"
+                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-0">
+                                    PIN Number
+                                </label>
+                                {errors.pin_number && <div className="text-sm text-red-600">{errors.pin_number}</div>}
                             </div>
 
-                            <div className="w-full">
-                                <label
-                                    htmlFor="client_name"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Client Name
-                                </label>
+                            {/* Client Name */}
+                            <div className="relative w-full">
                                 <input
                                     type="text"
                                     name="client_name"
-                                    id="client_name"
+                                    id="floating_client_name"
                                     value={data.client_name}
-                                    onChange={(e) =>
-                                        setData("client_name", e.target.value)
-                                    }
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Type client name"
+                                    onChange={(e) => setData("client_name", e.target.value)}
+                                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" "
                                     required
                                 />
-                                {errors.client_name && (
-                                    <div className="text-sm text-red-600">
-                                        {errors.client_name}
-                                    </div>
-                                )}
+                                <label
+                                    htmlFor="floating_client_name"
+                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-0">
+                                    Client Name
+                                </label>
+                                {errors.client_name && <div className="text-sm text-red-600">{errors.client_name}</div>}
                             </div>
 
-                            <div className="w-full">
-                                <label
-                                    htmlFor="incident_type"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Sub Category
-                                </label>
+                            {/* Incident Type */}
+                            <div className="relative w-full">
                                 <select
                                     name="incident_type"
-                                    id="incident_type"
+                                    id="floating_incident_type"
                                     value={data.incident_type}
                                     onChange={(e) => setData("incident_type", e.target.value)}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    required
                                 >
-                                      <option value="">-- Select Type of Other Incident --</option>
-                                        <option value="Community Health Issue">Community Health Issue</option>
-                                        <option value="Environmental Pollution">Environmental Pollution</option>
-                                        <option value="Disaster Preparedness Activity">Disaster Preparedness Activity</option>
-                                        <option value="Social Welfare Program">Social Welfare Program</option>
-                                        <option value="Public Gathering">Public Gathering</option>
-                                        <option value="Urban Development Issue">Urban Development Issue</option>
-                                        <option value="Educational Program">Educational Program</option>
-                                        <option value="Cultural Event">Cultural Event</option>
-                                        <option value="Relief Operations">Relief Operations</option>
-                                    </select>
-                                {errors.incident_type && (
-                                    <div className="text-sm text-red-600">
-                                        {errors.incident_type}
-                                    </div>
-                                )}
+                                    <option value="">-- Select Type of Other Incident --</option>
+                                    <option value="Community Health Issue">Community Health Issue</option>
+                                    <option value="Environmental Pollution">Environmental Pollution</option>
+                                    <option value="Disaster Preparedness Activity">Disaster Preparedness Activity</option>
+                                    <option value="Social Welfare Program">Social Welfare Program</option>
+                                    <option value="Public Gathering">Public Gathering</option>
+                                    <option value="Urban Development Issue">Urban Development Issue</option>
+                                    <option value="Educational Program">Educational Program</option>
+                                    <option value="Cultural Event">Cultural Event</option>
+                                    <option value="Relief Operations">Relief Operations</option>
+                                </select>
+                                <label
+                                    htmlFor="floating_incident_type"
+                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-0">
+                                    Sub Category
+                                </label>
+                                {errors.incident_type && <div className="text-sm text-red-600">{errors.incident_type}</div>}
                             </div>
 
-                            <div className="sm:col-span-2">
-                                <label
-                                    htmlFor="description"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Description
-                                </label>
+                            {/* Description */}
+                            <div className="relative sm:col-span-2">
                                 <textarea
-                                    id="description"
+                                    id="floating_description"
                                     name="description"
                                     rows="8"
                                     value={data.description}
                                     onChange={(e) => setData("description", e.target.value)}
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Your description here"
+                                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" "
                                     required
                                 ></textarea>
-                                {errors.description && (
-                                    <div className="text-sm text-red-600">
-                                        {errors.description}
-                                    </div>
-                                )}
+                                <label
+                                    htmlFor="floating_description"
+                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-0">
+                                    Your description here
+                                </label>
+                                {errors.description && <div className="text-sm text-red-600">{errors.description}</div>}
                             </div>
 
-                            <div className="px-3 py-10 sm:col-span-2">
-                                <label
-                                    htmlFor="image"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Image (optional)
-                                </label>
+                            {/* Image Upload */}
+                            <div className="relative px-3 py-10 sm:col-span-2">
                                 <input
                                     type="file"
                                     name="image"
                                     id="image"
-                                    onChange={(e) =>
-                                        setData("image", e.target.files[0])
-                                    }
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    onChange={(e) => setData("image", e.target.files[0])}
+                                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                 />
-                                {errors.image && (
-                                    <div className="text-sm text-red-600">
-                                        {errors.image}
-                                    </div>
-                                )}
+                                <label
+                                    htmlFor="image"
+                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform top-2 z-10 bg-white dark:bg-gray-900 px-2">
+                                    Upload Image (optional)
+                                </label>
+                                {errors.image && <div className="text-sm text-red-600">{errors.image}</div>}
                             </div>
                         </div>
                         <button
@@ -198,4 +174,3 @@ export default function other({ categoryId }) {
         </div>
     );
 }
-

@@ -1,8 +1,4 @@
 import GuestLayout from "@/Layouts/GuestLayout";
-import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function Register() {
@@ -25,81 +21,89 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
+            <form onSubmit={submit} className="max-w-md mx-auto">
+                {/* Name Field */}
+                <div className="relative z-0 w-full mb-5 group">
+                    <input
                         id="name"
                         name="name"
+                        type="text"
                         value={data.name}
-                        className="block w-full mt-1"
-                        autoComplete="name"
-                        isFocused={true}
                         onChange={(e) => setData("name", e.target.value)}
+                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
                         required
                     />
-
-                    <InputError message={errors.name} className="mt-2" />
+                    <label
+                        htmlFor="name"
+                        className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                        Name
+                    </label>
+                    {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name}</p>}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
+                {/* Email Field */}
+                <div className="relative z-0 w-full mb-5 group">
+                    <input
                         id="email"
-                        type="email"
                         name="email"
+                        type="email"
                         value={data.email}
-                        className="block w-full mt-1"
-                        autoComplete="username"
                         onChange={(e) => setData("email", e.target.value)}
+                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
                         required
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
+                    <label
+                        htmlFor="email"
+                        className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                        Email Address
+                    </label>
+                    {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
+                {/* Password Field */}
+                <div className="relative z-0 w-full mb-5 group">
+                    <input
                         id="password"
-                        type="password"
                         name="password"
+                        type="password"
                         value={data.password}
-                        className="block w-full mt-1"
-                        autoComplete="new-password"
                         onChange={(e) => setData("password", e.target.value)}
+                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
                         required
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    <label
+                        htmlFor="password"
+                        className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                        Password
+                    </label>
+                    {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
+                {/* Confirm Password Field */}
+                <div className="relative z-0 w-full mb-5 group">
+                    <input
                         id="password_confirmation"
-                        type="password"
                         name="password_confirmation"
+                        type="password"
                         value={data.password_confirmation}
-                        className="block w-full mt-1"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData("password_confirmation", e.target.value)
-                        }
+                        onChange={(e) => setData("password_confirmation", e.target.value)}
+                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
                         required
                     />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
+                    <label
+                        htmlFor="password_confirmation"
+                        className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                        Confirm Password
+                    </label>
+                    {errors.password_confirmation && <p className="mt-2 text-sm text-red-600">{errors.password_confirmation}</p>}
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
@@ -110,9 +114,13 @@ export default function Register() {
                         Already registered?
                     </Link>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <button
+                        type="submit"
+                        className="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                        disabled={processing}
+                    >
                         Register
-                    </PrimaryButton>
+                    </button>
                 </div>
             </form>
         </GuestLayout>

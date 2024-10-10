@@ -39,23 +39,22 @@ class CategoryController extends Controller
      */
     public function create(Request $request)
     {
-        sleep(1);
+        // Validate the request inputs
         $validatedData = $request->validate([
-            'category_type'    => 'required|string|max:20',
-            'description'   => 'required|string|max:255',
-
+            'category_type' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
-
-
-
-        // Create a new Incident record
-        $category = new Category();
-        $category->pin_number    = $validatedData['category_type'];
-        $category->client_name   = $validatedData['description'];
-
-        $category->save(); // Save the incident to the database
-        return redirect()->route('categories.index')->with(['success' => 'Category updated successfully!']);
+    
+        // Insert the data into the categories table
+        Category::create([
+            'category_type' => $validatedData['category_type'],
+            'description' => $validatedData['description'],
+        ]);
+    
+        // Redirect or send a response
+        return redirect()->route('categories.index')->with('success', 'Category created successfully!');
     }
+    
 
     /**
      * Store a newly created resource in storage.

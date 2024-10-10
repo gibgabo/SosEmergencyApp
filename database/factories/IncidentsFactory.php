@@ -21,7 +21,7 @@ class IncidentsFactory extends Factory
             'client_name' => fake()->name(),
             'incident_type' => fake()->word(),
             'description' => fake()->sentence(),
-            'image_path' => fake()->imageUrl(640, 480, 'cats'),
+            'image_path' => fake()->imageUrl(),
             'category_id' => rand(1, 6),
         ];
     }

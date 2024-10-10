@@ -4,12 +4,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IncidentsController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Models\Category;
-
-
 
 // Route for the welcome page
 Route::get('/', function () {
@@ -19,7 +15,6 @@ Route::get('/', function () {
 
 // Resource routes for categories
 Route::resource('categories', CategoryController::class);
-
 
 // Route to add incidents with category_id
 Route::get('/incidents/add/{category_id}', [IncidentsController::class, 'add'])->name('incident.add');
@@ -43,35 +38,38 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [IncidentsController::class, 'getIncidentCounts'])->name('dashboard');
     Route::get('/incidents/{category}', [IncidentsController::class, 'showByCategory']);
 
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Incident routes
     Route::prefix('incidents')->controller(IncidentsController::class)->group(function () {
         Route::get('/', 'index')->name('incidents.index');
         Route::get('edit/{id}', 'edit')->name('incident.edit');
-        Route::post('update/{id}', 'update')->name('incident.update');
+        
+        // Use PUT or PATCH for the update method
+        Route::put('update/{id}', [IncidentsController::class, 'update'])->name('incident.update');
+ 
         Route::get('show/{id}', 'show')->name('incident.show');
         Route::delete('delete/{id}', 'delete')->name('incident.delete');
         Route::get('restore/{id}', 'restore')->name('incident.restore');
     });
+
+    // Category routes
     Route::get('/categories-page', [CategoryController::class, 'showCategoriesPage'])->name('categories.page');
     Route::prefix('categories')->controller(CategoryController::class)->group(function () {
         Route::get('/', 'index')->name('categories.index');
         Route::get('/add', 'add')->name('categories.add');
-        Route::post('/create', 'create')->name('categories.create.unique'); // Modified the name
-        Route::post('update/{id}', 'update')->name('categories.update.unique'); // Modified the name
-        Route::get('edit/{id}', 'edit')->name('categories.edit.unique'); // Modified the name
-        Route::get('show/{id}', 'show')->name('categories.show.unique'); // Modified the name
+        Route::post('/create', 'create')->name('categories.create.unique');
+        Route::post('update/{id}', 'update')->name('categories.update.unique');
+        Route::get('edit/{id}', 'edit')->name('categories.edit.unique');
+        Route::get('show/{id}', 'show')->name('categories.show.unique');
         Route::delete('delete/{id}', 'delete')->name('categories.delete');
         Route::get('restore/{id}', 'restore')->name('categories.restore');
-        //for pages
-
 
         // Modified this route to avoid name conflicts with model binding route
-        Route::put('{category}', 'update')->name('categories.update.category'); // Modified the name
-        Route::get('{category}/edit', 'edit')->name('categories.edit.category'); // Modified the name // Modified the name
+        Route::put('{category}', 'update')->name('categories.update.category');
+        Route::get('{category}/edit', 'edit')->name('categories.edit.category');
     });
 });
 

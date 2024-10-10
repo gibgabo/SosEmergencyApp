@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Head, useForm } from "@inertiajs/react";
 import SearchBar from "@/Components/SearchBar";
+import Swal from "sweetalert2"; // Import SweetAlert
 
 export default function Category({ auth, flash, categories }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,23 +54,42 @@ export default function Category({ auth, flash, categories }) {
             toast.error(flash.message.error);
         }
     }, [flash]);
+
+    // SweetAlert for Deletion Confirmation
     const handleDelete = (categoryID) => {
-        if (confirm("Are you sure you want to delete this report?")) {
-            destroy(`/categories/delete/${categoryID}`, {
-                onSuccess: () => {
-                    setFilteredCategories(
-                        filteredCategories.filter(
-                            (incident) => category.id !== categoryID
-                        )
-                    );
-                },
-                onError: () => {
-                    alert(
-                        "An error occurred while trying to delete the incident."
-                    );
-                },
-            });
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                destroy(`/categories/delete/${categoryID}`, {
+                    onSuccess: () => {
+                        setFilteredCategories(
+                            filteredCategories.filter(
+                                (category) => category.id !== categoryID
+                            )
+                        );
+                        Swal.fire(
+                            'Deleted!',
+                            'Category has been deleted.',
+                            'success'
+                        );
+                    },
+                    onError: () => {
+                        Swal.fire(
+                            'Error!',
+                            'An error occurred while trying to delete the category.',
+                            'error'
+                        );
+                    },
+                });
+            }
+        });
     };
 
     // Function to handle form submission
@@ -84,28 +104,29 @@ export default function Category({ auth, flash, categories }) {
     };
 
     return (
-        <Authenticated user={auth.user} header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Categories</h2>}>
+        <Authenticated
+            user={auth.user}
+            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Categories</h2>}
+        >
             <Head title="Categories" />
             <ToastContainer />
-                <div className="flex items-center justify-between mb-2">
-                    {/* Search bar component */}
-                    <SearchBar onSearch={handleSearch} />
+            <div className="flex items-center justify-between mb-2">
+                {/* Search bar component */}
+                <SearchBar onSearch={handleSearch} />
 
-                    {/* Button to trigger modal */}
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="px-4 py-2 text-white bg-blue-500 rounded-md"
-                    >
-                        Add Category
-                    </button>
-                </div>
-
+                {/* Button to trigger modal */}
+                <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="px-4 py-2 text-white bg-blue-500 rounded-md"
+                >
+                    Add Category
+                </button>
+            </div>
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-
                             <th scope="col" className="px-6 py-3">
                                 Name
                             </th>
@@ -123,7 +144,6 @@ export default function Category({ auth, flash, categories }) {
                                 key={category.id}
                                 className="border-b odd:bg-white even:bg-gray-50 dark:border-gray-700"
                             >
-
                                 <td className="px-6 py-4">
                                     {category.category_type}
                                 </td>
@@ -145,8 +165,6 @@ export default function Category({ auth, flash, categories }) {
                     </tbody>
                 </table>
             </div>
-
-
 
             {/* Modal */}
             {isModalOpen && (
@@ -202,7 +220,6 @@ export default function Category({ auth, flash, categories }) {
                                 )}
                             </div>
                             <div>
-
                                 <button
                                     type="button"
                                     onClick={() => setIsModalOpen(false)}
@@ -218,7 +235,6 @@ export default function Category({ auth, flash, categories }) {
                                     Submit
                                 </button>
                             </div>
-
                         </form>
                     </div>
                 </div>

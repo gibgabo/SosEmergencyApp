@@ -13,23 +13,28 @@ use Illuminate\Support\Facades\DB;
 class IncidentsController extends Controller
 {
     public function index(Request $request)
-    {
-        $term = $request->input('term');
-        $query = Incidents::with('category');
+{
+    $term = $request->input('term');
+    $query = Incidents::with('category');
 
-        if ($request->term) {
-            $query->where(function ($query) use ($request) {
-                $query->where('pin_number', 'LIKE', '%' . $request->term . '%')
-                    ->orWhere('client_name', 'LIKE', '%' . $request->term . '%')
-                    ->orWhere('incident_type', 'LIKE', '%' . $request->term . '%')
-                    ->orWhere('description', 'LIKE', '%' . $request->term . '%');
-            });
-        }
-        $incidents = $query->latest()->paginate(10)->appends(['term' => $term]);;
-        return inertia('Incidents/Index', [
-            'incidents' => $incidents
-        ]);
+    // Apply search term if provided
+    if ($term) {
+        $query->where(function ($query) use ($term) {
+            $query->where('pin_number', 'LIKE', '%' . $term . '%')
+                  ->orWhere('client_name', 'LIKE', '%' . $term . '%')
+                  ->orWhere('incident_type', 'LIKE', '%' . $term . '%')
+                  ->orWhere('description', 'LIKE', '%' . $term . '%');
+        });
     }
+
+    // Paginate results and append the search term to the pagination links
+    $incidents = $query->latest()->paginate(10)->appends(['term' => $term]);
+
+    return inertia('Incidents/Index', [
+        'incidents' => $incidents,
+        'term' => $term, // Pass the search term back to the frontend
+    ]);
+}
 
 
     public function create(Request $request)
@@ -40,14 +45,13 @@ class IncidentsController extends Controller
             'incident_type' => 'required|string|max:255',
             'description'   => 'required|string',
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'required|integer',
+            'category_id'   => 'required|integer',
         ]);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('incident_images', 'public');
         }
-
 
         $incident = new Incidents();
         $incident->pin_number    = $validatedData['pin_number'];
@@ -57,8 +61,10 @@ class IncidentsController extends Controller
         $incident->category_id   = $validatedData['category_id'];
         $incident->image_path    = $imagePath;
         $incident->save();
+
         $categories = Category::all();
         Log::info('Fetched Categories:', $categories->toArray());
+
         return inertia('Welcome', [
             'categories' => $categories,
         ]);
@@ -72,12 +78,13 @@ class IncidentsController extends Controller
             'incident_type' => 'required|string|max:255',
             'description'   => 'required|string',
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'required|exists:categories,id',
+            'category_id'   => 'required|exists:categories,id',
         ]);
 
-        $imagePath = $this->handleImageUpload($request);
+       $imagePath = $request->file('image')->store('incident_images', 'public');
 
-        Incidents::Create([
+
+        Incidents::create([
             'pin_number'    => $validatedData['pin_number'],
             'client_name'   => $validatedData['client_name'],
             'incident_type' => $validatedData['incident_type'],
@@ -85,9 +92,7 @@ class IncidentsController extends Controller
             'image_path'    => $imagePath,
         ]);
 
-
         $categories = Category::all();
-
 
         return Inertia::location(route('welcome', ['categories' => $categories]));
     }
@@ -102,7 +107,6 @@ class IncidentsController extends Controller
 
     public function add($category_id)
     {
-
         $category = Category::find($category_id);
         if (!$category) {
             return redirect()->route('incidents.index')->with('error', 'Category not found.');
@@ -121,45 +125,63 @@ class IncidentsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'pin_number'    => 'required|string|max:20',
-            'client_name'   => 'required|string|max:255',
-            'incident_type' => 'required|string|max:255',
-            'description'   => 'required|string',
+        $incident = Incidents::findOrFail($id);
+
+        $request->validate([
+            'pin_number' => 'required',
+            'client_name' => 'required',
+            'incident_type' => 'required',
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $incident = Incidents::findOrFail($id);
-        $incident->update($validatedData);
+        $incident->pin_number = $request->pin_number;
+        $incident->client_name = $request->client_name;
+        $incident->incident_type = $request->incident_type;
+        $incident->description = $request->description;
 
-        return redirect()->route('incidents.index')->with(['success' => 'Incident updated successfully!']);
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($incident->image_path) {
+                Storage::disk('public')->delete($incident->image_path);
+            }
+            // Store the new image
+            $incident->image_path = $request->file('image')->store('incident_images', 'public');
+        }
+
+        $incident->save();
+
+        return redirect()->route('incidents.index')->with('success', 'Incident updated successfully.');
     }
 
     public function show($id)
     {
-        $incident = Incidents::where('id', $id)->first();
+        $incident = Incidents::findOrFail($id);
         return inertia('Incidents/Show', ['incident' => $incident]);
     }
 
     public function delete($id)
     {
-        $item = Incidents::findOrFail($id);
+        $incident = Incidents::findOrFail($id);
 
-        if ($item->image_path) {
-            Storage::disk('public')->delete($item->image_path);
+        // Delete the associated image if it exists
+        if ($incident->image_path) {
+            Storage::disk('public')->delete($incident->image_path);
         }
 
-        $item->delete();
+        $incident->delete();
 
-        return redirect('incidents')->with(['success' => 'Incident Report has been deleted.']);
+        return redirect()->route('incidents.index')->with('success', 'Incident deleted successfully.');
     }
 
     public function restore($id)
     {
-        $item = Incidents::withTrashed()->find($id);
-        $item->restore();
+        $incident = Incidents::withTrashed()->find($id);
+        $incident->restore();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Incident restored successfully.');
     }
+
     public function getIncidentCounts()
     {
         $counts = DB::table('incidents')
@@ -174,13 +196,14 @@ class IncidentsController extends Controller
 
     public function showByCategory($category)
     {
-        // Retrieve incidents based on category name or ID
         $categoryDetails = Category::where('category_type', $category)->first();
 
         if (!$categoryDetails) {
-            abort(404, "Category not found");
+            abort(404, 'Category not found.');
         }
+
         $incidents = Incidents::where('category_id', $categoryDetails->id)->paginate(5);
+
         return Inertia::render('CategoryIncidents/CategoryIncidents', [
             'incidents' => $incidents,
             'category' => $categoryDetails,
